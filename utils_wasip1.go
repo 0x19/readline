@@ -1,5 +1,5 @@
-//go:build aix || darwin || dragonfly || freebsd || (linux && !appengine && !wasm && !wasip1 && !js) || netbsd || openbsd || os400 || solaris
-// +build aix darwin dragonfly freebsd linux,!appengine,!wasm,!wasip1,!js netbsd openbsd os400 solaris
+//go:build wasip1
+// +build wasip1
 
 package readline
 

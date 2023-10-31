@@ -1,12 +1,10 @@
-//go:build aix || darwin || dragonfly || freebsd || (linux && !appengine && !wasm && !wasip1 && !js) || netbsd || openbsd || os400 || solaris
-// +build aix darwin dragonfly freebsd linux,!appengine,!wasm,!wasip1,!js netbsd openbsd os400 solaris
+//go:build js
+// +build js
 
 package readline
 
 import (
 	"io"
-	"os"
-	"os/signal"
 	"sync"
 	"syscall"
 )
@@ -22,10 +20,7 @@ type winsize struct {
 // For OSX it need to send to parent's pid
 // For Linux it need to send to myself
 func SuspendMe() {
-	p, _ := os.FindProcess(os.Getppid())
-	p.Signal(syscall.SIGTSTP)
-	p, _ = os.FindProcess(os.Getpid())
-	p.Signal(syscall.SIGTSTP)
+
 }
 
 // get width of the terminal
@@ -66,19 +61,5 @@ var (
 )
 
 func DefaultOnWidthChanged(f func()) {
-	widthChangeCallback = f
-	widthChange.Do(func() {
-		ch := make(chan os.Signal, 1)
-		signal.Notify(ch, syscall.SIGWINCH)
 
-		go func() {
-			for {
-				_, ok := <-ch
-				if !ok {
-					break
-				}
-				widthChangeCallback()
-			}
-		}()
-	})
 }
